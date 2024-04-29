@@ -3,7 +3,7 @@
 import { z } from "zod";
 import fs from "fs/promises";
 import db from '@/db/db';
-import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import crypto from 'crypto';
 
 const fileSchema = z.instanceof(File, { message: "Required" });
@@ -48,4 +48,16 @@ export async function addProduct(prevState: unknown, formData: FormData) {
     console.error("Error occurred while adding product:", error);
     throw error;
   }
+}
+
+export async function toggleProductAvailability(id: string, isAvailbleForPurchase: boolean){
+  
+  await db.product.update({where: {id}, data: {isAvailbleForPurchase}})
+  
+}
+
+export async function deleteProduct(id: string ){
+  const product = await db.product.delete({where : {id}})
+
+  if(product == null) return notFound()
 }

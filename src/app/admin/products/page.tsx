@@ -4,8 +4,9 @@ import Link from 'next/link'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import db from '@/db/db'
 import { formatCurrency, formatNumber } from '@/lib/formatters'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { CheckCircle2, MoveVertical, XCircle } from 'lucide-react'
+import { ActiveToggleDropdownItem, DeleteDropdownItem } from './_components/ProductAction'
 
 export default function AdminProductsPage() {
   return (
@@ -89,6 +90,15 @@ if (products.length === 0) return <p>No products found</p>
                     Edit
                   </Link>
                 </DropdownMenuItem>
+                <ActiveToggleDropdownItem 
+                id = {product.id} 
+                isAvailbleForPurchase={product.isAvailbleForPurchase} 
+                />
+                <DropdownMenuSeparator/>
+                <DeleteDropdownItem 
+                id = {product.id} 
+                disabled={product._count.orders > 0}
+                />
               </DropdownMenuContent>
             </DropdownMenu>
             </TableCell>
