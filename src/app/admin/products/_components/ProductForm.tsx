@@ -8,10 +8,12 @@ import { formatCurrency } from '@/lib/formatters';
 import { useState } from 'react';
 import { addProduct } from '../../_actions/product';
 import { useFormState, useFormStatus } from 'react-dom';
+import { Product } from '@prisma/client';
+import Image from 'next/image';
 
-export function ProductForm() {
+export function ProductForm({product} : {product?: Product | null}) {
   const [error, action]= useFormState(addProduct, {})
-  const [priceInCents, setPriceInCents] = useState<number>();
+  const [priceInCents, setPriceInCents] = useState<number | undefined >(product?.priceInCents);
 
   return (
     <form action={action} className='space-y-8'>
@@ -22,6 +24,7 @@ export function ProductForm() {
           id="name" 
           name="name" 
           required
+          defaultValue={product?.name || ""}
         />
         {error.name && <div className= "text-destructive"> {error.name} </div>}
       </div>
@@ -39,12 +42,14 @@ export function ProductForm() {
           {formatCurrency((priceInCents || 0) / 100)}
         </div>
         {error.priceInCents && <div className= "text-destructive"> {error.priceInCents} </div>}
+        </div>
         <div className='space-y-2'>
           <Label htmlFor="description">Description</Label>
           <Textarea 
             id="description" 
             name="description" 
             required
+            defaultValue={product?.description || ""}
           />
         </div>
         {error.description && <div className= "text-destructive"> {error.description} </div>}
@@ -55,10 +60,11 @@ export function ProductForm() {
             type="file" 
             id="file" 
             name="file" 
-            required
+            required = {product == null}
           />
+          {product != null && <div className='text-muted-foreground'> {product.filePath}</div>} 
+          {error.file && <div className= "text-destructive"> {error.file} </div>}
         </div>
-        {error.file && <div className= "text-destructive"> {error.file} </div>}
 
         <div className='space-y-2'>
           <Label htmlFor="image">Image</Label>
@@ -66,13 +72,19 @@ export function ProductForm() {
             type="file" 
             id="image" 
             name="image" 
-            required
+            required = {product == null}
           />
-        </div>
-        {error.image && <div className= "text-destructive"> {error.image} </div>}
+        {product != null &&
+        <Image 
+          src={"/" + product.imagePath} //ver estructura de carpetas y absolute path
+          height="400" 
+          width="400" 
+          alt="Product Image" 
+        />}
 
-        <Button type="submit"> Save</Button>
+        {error.image && <div className= "text-destructive"> {error.image} </div>}
       </div>
+        <SubmitButton />
     </form>
   );
 }

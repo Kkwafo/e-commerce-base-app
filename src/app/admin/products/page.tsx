@@ -81,12 +81,12 @@ if (products.length === 0) return <p>No products found</p>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem asChild>
-                  <a download href={`/admin/product/${product.id}/download`}>
+                  <a download href={`/admin/products/${product.id}/download`}>
                     Download
                   </a>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link  href={`/admin/product/${product.id}/edit`}>
+                  <Link  href={`/admin/products/${product.id}/edit`}>
                     Edit
                   </Link>
                 </DropdownMenuItem>
