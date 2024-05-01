@@ -7,12 +7,14 @@ import { useRouter } from 'next/navigation';
 
 export function ActiveToggleDropdownItem({id, isAvailbleForPurchase}: {id: string, isAvailbleForPurchase: boolean}){
   const [isPending, startTransition] = useTransition()
+  const router = useRouter()
   return (
   <DropdownMenuItem 
   disabled={isPending}
   onClick={()=> {
     startTransition(async () => {
       await toggleProductAvailability(id, !isAvailbleForPurchase)
+      router.refresh()
     })
   }}>
 {(isAvailbleForPurchase) ? "Desactivate" : "Activate"}
