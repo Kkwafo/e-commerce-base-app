@@ -66,7 +66,7 @@ if (products.length === 0) return <p>No products found</p>
            <>
               <span className='sr-only'> Unavaible </span>
 
-              <XCircle />
+              <XCircle className='stroke-destructive'/>
             </>
           )}         
           </TableCell>

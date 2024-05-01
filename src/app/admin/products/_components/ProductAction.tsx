@@ -3,6 +3,7 @@
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { useTransition } from 'react';
 import { deleteProduct, toggleProductAvailability } from '../../_actions/product';
+import { useRouter } from 'next/navigation';
 
 export function ActiveToggleDropdownItem({id, isAvailbleForPurchase}: {id: string, isAvailbleForPurchase: boolean}){
   const [isPending, startTransition] = useTransition()
@@ -19,6 +20,8 @@ export function ActiveToggleDropdownItem({id, isAvailbleForPurchase}: {id: strin
 }
 export function DeleteDropdownItem({id, disabled} : {id:string, disabled:boolean} ){
   const [isPending, startTransition] = useTransition()
+  const router = useRouter()
+
   return (
   <DropdownMenuItem 
   variant ="destructive"
@@ -27,6 +30,9 @@ export function DeleteDropdownItem({id, disabled} : {id:string, disabled:boolean
     startTransition(async () => {
       await deleteProduct(id)
     })
+    router.refresh()
+    // router.push('admin/products')
+
   }}>
     Delete
   </DropdownMenuItem>
